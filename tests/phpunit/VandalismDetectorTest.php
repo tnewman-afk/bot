@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../testBaseClass.php';
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/../../VandalismDetector.php';
 
 /**
  * Tests for VandalismDetector
  */
-final class VandalismDetectorTest extends testBaseClass {
+final class VandalismDetectorTest extends TestCase {
 
     public function testDetectRudeWords(): void {
         $text = "This article is fucking stupid";

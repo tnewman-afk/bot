@@ -1,8 +1,8 @@
-# Citation Bot to Protector Bot Transformation Summary
+# Protector Bot - Anti-Vandalism System
 
 ## Overview
 
-This document summarizes the complete transformation of the Citation Bot into the Protector Bot - an anti-vandalism bot for Wikipedia.
+This is a dedicated anti-vandalism bot for Wikipedia. All citation-related functionality has been removed to keep the codebase simple and focused.
 
 ## Changes at a Glance
 
@@ -185,22 +185,30 @@ Vandalism detection demo with 8 test cases:
 - True Negatives: 3/3 legitimate cases passed (100%)
 - Overall Accuracy: 8/8 (100%)
 
-## Backward Compatibility
+## Simplified Codebase
 
-**Legacy Features Preserved**:
-- Citation expansion functionality intact
-- `process_page.php` still works for citation bot
-- All original classes (Template, Page, Parameter, etc.) unchanged
-- Existing tests not modified
-- Original deployment instructions preserved
+**Citation Functionality Removed**:
+All citation-related files have been removed to simplify the codebase:
+- Template.php, Page.php, Parameter.php, Comment.php, NameTools.php
+- Zotero.php, apiFunctions.php, expandFns.php
+- process_page.php, generate_template.php, gadgetapi.php
+- All citation-related tests
+- Web interface files (index.html, index.js)
+- Citation constants and configuration
+
+**Core Files Remaining**:
+- VandalismDetector.php - Vandalism detection engine
+- ProtectorBot.php - Main bot implementation
+- protector_bot_main.php - CLI entry point
+- WikipediaBot.php - Wikipedia API interaction
+- constants.php - Simplified configuration (anti-vandalism only)
+- setup.php - Minimal environment setup
+- user_messages.php - Output functions
 
 **Usage**:
 ```bash
-# New: Anti-vandalism bot
+# Anti-vandalism bot
 php protector_bot_main.php --limit=50
-
-# Legacy: Citation expansion
-php process_page.php "Page_Name" --slow --savetofiles
 ```
 
 ## Testing Summary

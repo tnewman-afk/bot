@@ -1,10 +1,6 @@
-cookie*.txt
-clover.xml
-**/private*
 *.lock
 vendor/*
-tmp/*
 env.php
-core
-coverage.xml
 .phpunit.result.cache
+ProtectorBot.log
+CodeCoverage

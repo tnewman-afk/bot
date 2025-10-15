@@ -12,19 +12,20 @@
 
 # Protector Bot
 
-## GitHub repository details
-This is an anti-vandalism bot for Wikipedia that monitors recent changes and automatically reverts vandalism.
+## Anti-Vandalism Bot for Wikipedia
+
+Protector Bot is a comprehensive anti-vandalism bot for Wikipedia that automatically monitors recent changes and reverts vandalism using multiple detection methods.
 
 ## Overview
 
 This bot monitors Wikipedia for vandalism using multiple detection methods:
 
-* **Rude/Offensive Words Detection**: Identifies inappropriate language
-* **Humor/Joke Detection**: Catches non-encyclopedic humor and memes
-* **Vandalism Keyword Detection**: Recognizes common vandalism patterns
-* **Complex Heuristics**: Advanced checks for suspicious patterns, gibberish, and other indicators
+* **Rude/Offensive Words Detection**: Identifies inappropriate language (23+ terms)
+* **Humor/Joke Detection**: Catches non-encyclopedic humor and memes (20+ patterns)
+* **Vandalism Keyword Detection**: Recognizes common vandalism patterns (16+ keywords)
+* **Complex Heuristics**: Advanced checks for suspicious patterns, gibberish, excessive punctuation, spam, and other indicators
 * **Wikipedia Patrol Flags**: Integrates with Wikipedia's patrol system to enhance detection
-* **Automatic Reversion**: Automatically reverts ALL edits by a user if one is determined to be vandalism
+* **Automatic Reversion**: Automatically reverts ALL edits by a user if one is determined to be vandalism (threshold: 1 edit)
 
 ## Main Components
 
@@ -32,16 +33,19 @@ This bot monitors Wikipedia for vandalism using multiple detection methods:
 * `VandalismDetector.php`: Vandalism detection algorithms and heuristics
 * `protector_bot_main.php`: Entry point for running the bot
 * `WikipediaBot.php`: Core Wikipedia API interaction functions
+* `constants.php`: Configuration constants
+* `setup.php`: Environment setup
 
-## Legacy Components
+## Features
 
-This bot was previously a Citation Bot. The following components are legacy and remain for backward compatibility:
+- **8 Detection Methods**: Multi-layered approach for high accuracy
+- **Confidence Scoring**: Weighted system (0.0-1.0) with 0.5 threshold
+- **Aggressive Protection**: Reverts ALL edits if ANY vandalism detected
+- **User Notifications**: Automatic warnings posted to vandal talk pages
+- **Statistics Tracking**: Detailed monitoring and reporting
+- **Continuous Mode**: Can run continuously with configurable intervals
 
-* DOIBot: `index.html` (web frontend) and `process_page.php` (citation expansion backend)
-* Citation expander gadget integration: `gadgetapi.php`
-* Template generator: `generate_template.php`
-
-Bugs and feature requests: https://en.wikipedia.org/wiki/User_talk:Protector_bot.
+Bugs and feature requests: https://en.wikipedia.org/wiki/User_talk:Protector_bot
 
 ## Structure
 
@@ -99,7 +103,7 @@ Or for testing in the shell:
 
 Before entering the k8s shell, it may be necessary to install phpunit (as wget is not available in the k8s shell).
 
-## Running the Anti-Vandalism Bot
+## Running the Bot
 
 To run the Protector Bot for anti-vandalism monitoring:
 
@@ -111,12 +115,14 @@ Command line parameters:
 * `--continuous` - Run continuously in monitoring mode
 * `--help` - Show help message
 
-## Running Legacy Citation Bot (Command Line)
+Examples:
+```bash
+# Monitor 50 recent changes (one-time)
+php protector_bot_main.php
 
-The legacy citation expansion functionality can still be used:
+# Monitor 100 changes continuously
+php protector_bot_main.php --limit=100 --continuous
 
-    /usr/bin/php ./process_page.php "Page_Name" --slow --savetofiles
-    
-Legacy command line parameters:
-* `--slow` - retrieve bibcodes and expand urls
-* `--savetofiles` - save processed pages as files (with .md extension) instead of submitting them to Wikipedia
+# Monitor only patrolled edits
+php protector_bot_main.php --patrolled-only
+```
