@@ -54,7 +54,7 @@ final class WikipediaBot {
         $this->user_token = new Token("", "");
 
         if (TRAVIS) {
-            $this->the_user = 'Citation_bot';
+            $this->the_user = 'Protector_bot';
             // @codeCoverageIgnoreStart
         } elseif (!HTML_OUTPUT) { // Running on the command line, and editing using main tokens
             $this->the_user = '';
@@ -92,7 +92,7 @@ final class WikipediaBot {
                 report_warning('Wikipedia page is protected from editing.  Aborting changes for this page.');
                 return true;
             } elseif (strpos($respone_info, 'Wikipedia:Why create an account') !== false) {
-                report_error('The bot is editing as you, and you have not granted that permission.  Go to ' . WIKI_ROOT . '?title=Special:OAuthManageMyGrants/update/230820 and grant Citation Bot "Edit existing pages" rights.');  // @codeCoverageIgnore
+                report_error('The bot is editing as you, and you have not granted that permission.  Go to ' . WIKI_ROOT . '?title=Special:OAuthManageMyGrants/update/230820 and grant Protector Bot "Edit existing pages" rights.');  // @codeCoverageIgnore
             } elseif (strpos($respone_info, 'The authorization headers in your request are not valid') !== false) {
                 report_error('There is something wrong with your Oauth tokens');  // @codeCoverageIgnore
             } elseif (strpos($respone_info, 'Edit conflict') !== false) {
@@ -179,7 +179,7 @@ final class WikipediaBot {
 
     /** @phpstan-impure */
     public function write_page(string $page, string $text, string $editSummary, int $lastRevId, string $startedEditing): bool {
-        if (stripos($text, "CITATION_BOT_PLACEHOLDER") !== false)  {
+        if (stripos($text, "PROTECTOR_BOT_PLACEHOLDER") !== false)  {
             report_minor_error("\n ! Placeholder left escaped in text. Aborting for page " . echoable($page));  // @codeCoverageIgnore
             return false;                                                                             // @codeCoverageIgnore
         }

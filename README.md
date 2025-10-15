@@ -10,28 +10,38 @@
 [![GitHub issues](https://img.shields.io/github/issues/ms609/citation-bot.png)](https://github.com/ms609/citation-bot/issues)
 
 
-# Citation bot
+# Protector Bot
 
 ## GitHub repository details
-There are one to two main branches of the bot: 
-- The **master** code is implemented at https://citations.toolforge.org/, and is intended for public use.
-- When needed, the **development** branch is intended for major restructuring and testing, and is implemented at https://citations-dev.toolforge.org/ .  
+This is an anti-vandalism bot for Wikipedia that monitors recent changes and automatically reverts vandalism.
 
 ## Overview
 
-This is some basic documentation about what this bot is and how some of the parts connect.
+This bot monitors Wikipedia for vandalism using multiple detection methods:
 
-This is more properly a bot-gadget-tool combination. The parts are:
+* **Rude/Offensive Words Detection**: Identifies inappropriate language
+* **Humor/Joke Detection**: Catches non-encyclopedic humor and memes
+* **Vandalism Keyword Detection**: Recognizes common vandalism patterns
+* **Complex Heuristics**: Advanced checks for suspicious patterns, gibberish, and other indicators
+* **Wikipedia Patrol Flags**: Integrates with Wikipedia's patrol system to enhance detection
+* **Automatic Reversion**: Automatically reverts ALL edits by a user if one is determined to be vandalism
 
-* DOIBot, found in `index.html` (web frontend) and `process_page.php` (information is
-  POSTed to this and it does the citation expansion; backend). This automatically
-  posts a new page revision with expanded citations and thus requires a bot account.
-  All activity takes place on Tool Labs.
-* Citation expander (https://en.wikipedia.org/wiki/MediaWiki:Gadget-citations.js) + `gadgetapi.php`. This
-  is comprises an Ajax front-end in the on-wiki gadget and a PHP backend API.
-* `generate_template.php` creates the wiki reference given an identifier (for example: https://citations.toolforge.org/generate_template.php?doi=10.1109/SCAM.2013.6648183)
+## Main Components
 
-Bugs and requested changes are listed here: https://en.wikipedia.org/wiki/User_talk:Citation_bot.
+* `ProtectorBot.php`: Main anti-vandalism engine that monitors recent changes
+* `VandalismDetector.php`: Vandalism detection algorithms and heuristics
+* `protector_bot_main.php`: Entry point for running the bot
+* `WikipediaBot.php`: Core Wikipedia API interaction functions
+
+## Legacy Components
+
+This bot was previously a Citation Bot. The following components are legacy and remain for backward compatibility:
+
+* DOIBot: `index.html` (web frontend) and `process_page.php` (citation expansion backend)
+* Citation expander gadget integration: `gadgetapi.php`
+* Template generator: `generate_template.php`
+
+Bugs and feature requests: https://en.wikipedia.org/wiki/User_talk:Protector_bot.
 
 ## Structure
 
@@ -79,7 +89,7 @@ To run the bot from a new environment, you will need to create an `env.php` file
 
  To run the bot as a webservice from WM Toolforge:
 
-    become citations[-dev]
+    become protector[-dev]
     webservice stop
     webservice --backend=kubernetes php8.2 start
 
@@ -89,13 +99,24 @@ Or for testing in the shell:
 
 Before entering the k8s shell, it may be necessary to install phpunit (as wget is not available in the k8s shell).
 
-## Running on the command line
-In order to run on the command line one needs OAuth tokens as documented in `env.php.example` (there are additional API keys that are needed to run some functions).  Change BOT_USER_AGENT in `setup.php` to something else. Use composer to `composer require mediawiki/oauthclient:dev-master`.  Then the bot can be run such as:
+## Running the Anti-Vandalism Bot
 
-    /usr/bin/php ./process_page.php "Covid Watch|Water|COVID-19_apps" --slow --savetofiles
-    
-The command line tool will also accept `page_list.txt` and `page_list2.txt` as page names.  In those cases the bot expect a file of such name to contain a single line of | seperated page names.  This code requires PHP 8.2 with optional packages included: php82-mbstring php82-sockets php82-opcache php82-openssl php82-xmlrpc php82-gettext php82-curl php82-intl php82-iconv
+To run the Protector Bot for anti-vandalism monitoring:
+
+    /usr/bin/php ./protector_bot_main.php --limit=50
 
 Command line parameters:
+* `--limit=N` - Number of recent changes to check (default: 50)
+* `--patrolled-only` - Only check patrolled edits
+* `--continuous` - Run continuously in monitoring mode
+* `--help` - Show help message
+
+## Running Legacy Citation Bot (Command Line)
+
+The legacy citation expansion functionality can still be used:
+
+    /usr/bin/php ./process_page.php "Page_Name" --slow --savetofiles
+    
+Legacy command line parameters:
 * `--slow` - retrieve bibcodes and expand urls
 * `--savetofiles` - save processed pages as files (with .md extension) instead of submitting them to Wikipedia
