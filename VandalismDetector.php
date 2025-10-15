@@ -77,7 +77,7 @@ class VandalismDetector {
         $patternsMatched = self::checkSuspiciousPatterns($checkText);
         if (count($patternsMatched) > 0) {
             $reasons[] = "Matches suspicious patterns: " . implode(', ', $patternsMatched);
-            $score += 0.25 * count($patternsMatched);
+            $score += 0.4 * count($patternsMatched);
         }
         
         // Additional heuristics
@@ -90,8 +90,8 @@ class VandalismDetector {
         // Cap score at 1.0
         $confidence = min($score, 1.0);
         
-        // Consider it vandalism if confidence > 0.5
-        $isVandalism = $confidence > 0.5;
+        // Consider it vandalism if confidence >= 0.5
+        $isVandalism = $confidence >= 0.5;
         
         return [
             'is_vandalism' => $isVandalism,
